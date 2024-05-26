@@ -1,17 +1,6 @@
 # Python notebook checkpoint
 .ipynb_checkpoints
 
-# Node.js
-node_modules/
-
-# npm
-*.log
-*.lock
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-
 # Environment variables
 .env
 
@@ -40,8 +29,3 @@ Thumbs.db
 # Logs
 logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
