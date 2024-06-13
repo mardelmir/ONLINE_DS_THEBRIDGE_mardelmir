@@ -1,0 +1,10 @@
+# 3-5 problemas a resolver usando datos
+- Recomendaciones de platos/comidas basado en últimos pedidos de comida realizados o establecimientos visitados.
+- Recomendaciones de regalos de cumpleaños basado en una lista de gustos (aficiones, música, libros favoritos...).
+- Recomendación de videos/música basado en últimos elementos reproducidos.
+- Predictor de bajada de precios para un producto online basado en la evolución de precios de productos similares/del mismo fabricante.
+
+# 3-5 posibles conjuntos de datos a usar
+- Top reproducciones en plataformas de streaming en los últimos 15 años.
+- Información sobre el tipo de causas de enfermedad y muerte más frecuentes en los últimos 25 años.
+- 
