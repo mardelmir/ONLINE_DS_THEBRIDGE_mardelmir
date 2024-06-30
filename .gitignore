@@ -1,8 +1,9 @@
 # Python notebook checkpoint
 .ipynb_checkpoints
 
-# Environment variables
+# Environment variables + gitignore
 .env
+.gitignore
 
 # Editor
 .vscode/
