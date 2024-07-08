@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 
 def pinta_distribucion_categoricas(df, columnas_categoricas, relativa=False, mostrar_valores=False):
@@ -273,4 +273,29 @@ def bubble_plot(df, col_x, col_y, col_size, scale = 1000):
     plt.title(f'Burbujas de {col_x} vs {col_y} con Tamaño basado en {col_size}')
     plt.show()
 
+def plot_multiple_boxplots(df, columns, dim_matriz_visual = 2):
+    num_cols = len(columns)
+    num_rows = num_cols // dim_matriz_visual + num_cols % dim_matriz_visual
+    fig, axes = plt.subplots(num_rows, dim_matriz_visual, figsize=(12, 6 * num_rows))
+    axes = axes.flatten()
 
+    for i, column in enumerate(columns):
+        if df[column].dtype in ['int64', 'float64']:
+            sns.boxplot(data=df, x=column, ax=axes[i])
+            axes[i].set_title(column)
+
+    # Ocultar ejes vacíos
+    for j in range(i+1, num_rows * 2):
+        axes[j].axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_boxplot_grouped(df, column_to_plot, group_column):
+    if df[column_to_plot].dtype in ['int64', 'float64'] and df[group_column].dtype in ['object', 'category']:
+        sns.boxplot(data=df, x=group_column, y=column_to_plot)
+        plt.show()
+
+def get_IQR(df, col):
+    return df[col].quantile(0.75) - df[col].quantile(0.25)
