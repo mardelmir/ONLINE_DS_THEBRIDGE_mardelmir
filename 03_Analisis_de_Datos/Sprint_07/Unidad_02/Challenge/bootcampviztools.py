@@ -40,7 +40,7 @@ def pinta_distribucion_categoricas(df, columnas_categoricas, relativa=False, mos
     plt.show()
 
 
-def plot_categorical_relationship_fin(df, cat_col1, cat_col2, relative_freq=False, show_values=False, size_group = 5):
+def plot_categorical_relationship_fin(df, cat_col1, cat_col2, relative_freq = False, show_values = False, size_group = 5):
     # Prepara los datos
     count_data = df.groupby([cat_col1, cat_col2]).size().reset_index(name='count')
     total_counts = df[cat_col1].value_counts()
