@@ -1,0 +1,38 @@
+pip install virtualenv --> instalar creador de entornos virtuales
+
+virtualenv entorno_virtual --> crear entorno virtual
+
+# Windows
+# entorno_virtual/Scripts/activate --> activar entorno virtual
+
+# macOS
+entorno_virtual/bin/activate --> activar entorno virtual
+
+virtualenv entorno_virtual -p path\to\new_python.exe --> Crear un entorno virtual con una versión especifíca de python
+# -p ruta completa, sino la hace relativa a donde esté 
+
+pip install -r requirements.txt --> instalar todas las librerías del archivo requirements.txt. Si lo haces en el terminal del ordenador, te instala lo que tienes en tu ordenador. Si lo haces desde tu entorno virtual, te instala lo que tienes en el entorno virtual
+
+pip freeze > requirements.txt --> exportar los nombres de las librerías instaladas a un archivo llamado requirements.txt. Si lo haces en el terminal del ordenador, te exporta lo que tienes en tu ordenador. Si lo haces desde tu entorno virtual, te exporta lo que tienes en el entorno virtual.
+
+pip uninstall -r requirements.txt -y --> desinstalar todas las librerías del requirements.txt. Aplicable tanto a tu ordenador como a tu entorno virtual.
+
+
+TERMINAL BASH CORRECTA:
+
+MacBook-Maria:ONLINE_DS_THEBRIDGE_mardelmir maria$ cd 03_Analisis_de_Datos/Sprint_08/Team_challenge/
+MacBook-Maria:Team_challenge maria$ ls
+Streamlit
+MacBook-Maria:Team_challenge maria$ which pyhton3
+MacBook-Maria:Team_challenge maria$ which python
+/Users/maria/.pyenv/versions/3.12.4/bin/python
+MacBook-Maria:Team_challenge maria$ virtualenv env_3 -p /Users/maria/.pyenv/versions/3.12.4/bin/python.exe
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/maria/.pyenv/versions/3.12.4/bin/python.exe'
+MacBook-Maria:Team_challenge maria$ virtualenv env_3 -p /Users/maria/.pyenv/versions/3.12.4/bin/python
+created virtual environment CPython3.12.4.final.0-64 in 207ms
+  creator CPython3Posix(dest=/Users/maria/Library/Mobile Documents/com~apple~CloudDocs/Documents/THE BRIDGE/Data Science/Ejercicios/ONLINE_DS_THEBRIDGE_mardelmir/03_Analisis_de_Datos/Sprint_08/Team_challenge/env_3, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/Users/maria/Library/Application Support/virtualenv)
+    added seed packages: pip==24.1.2
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+MacBook-Maria:Team_challenge maria$ source env_3/bin/activate
+(env_3) MacBook-Maria:Team_challenge maria$ pip install altair
