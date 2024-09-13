@@ -213,7 +213,7 @@ def plot_grouped_histograms(df, cat_col, num_col, group_size):
         subset_cats = unique_cats[i:i+group_size]
         subset_df = df[df[cat_col].isin(subset_cats)]
         
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize = (10, 6))
         for cat in subset_cats:
             sns.histplot(subset_df[subset_df[cat_col] == cat][num_col], kde=True, label=str(cat))
         
