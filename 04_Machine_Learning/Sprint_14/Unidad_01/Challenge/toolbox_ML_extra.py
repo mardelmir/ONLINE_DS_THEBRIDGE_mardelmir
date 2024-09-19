@@ -5,76 +5,113 @@ import seaborn as sns
 
 from scipy.stats import pearsonr, f_oneway, mannwhitneyu
 
-def describe_df_extra(df, count = False, na_count = False, sort_na = False): 
+def describe_df(df, count = False, na_count = False, sort_by = None, ascending = True):
     """
-    Generates a summary DataFrame describing the input DataFrame's data types, percentage of missing values, number of unique values, cardinality (percentage of unique values), and optionally, the count of non-null values.
+    Generates a summary DataFrame describing key statistics of the input DataFrame, including:
+    
+    - Data types.
+    - Percentage of missing values.
+    - Number of unique values.
+    - Cardinality (percentage of unique values).
+    
+    Optionally, it can also include the count of non-null values and the absolute number of missing values.
+    
+    The summary DataFrame can be sorted by a specified column, either by name or index, in ascending or descending order.
 
     Parameters
     ----------
     df : pd.DataFrame
         The DataFrame to be described.
     
-    count : bool, optional
-        If True, includes the count of non-null values in each column (default is False).
+    count : bool, optional, default False
+        If True, includes the count of non-null values in each column.
+        
+    na_count : bool, optional, default False
+        If True, includes the absolute number of missing values in each column.
     
+    sort_by : str or int, optional, default None
+        Specifies the column by which the summary DataFrame should be sorted.
+        Can be a column name (str) or an index (int). For example, 'Data type' or 0.
+        If None, no sorting is applied.
+    
+    ascending : bool, optional, default True
+        Specifies the sorting order. If True, sorts in ascending order. If False, sorts in descending order.
+
     Returns
     -------
-    df_summary: pd.DataFrame
-        A DataFrame with a summary of data types, missing values, unique values, cardinality, and optionally, the count of non-null values for each column.
+    df_summary : pd.DataFrame
+        A DataFrame containing the following columns:
+        - 'Data type': The data type of each column.
+        - '% Missings': The percentage of missing values.
+        - 'Unique values': The count of unique values in each column.
+        - '% Cardinality': The cardinality, or percentage of unique values.
+        - Optionally, 'Not-Null' and 'Missings', based on the `count` and `na_count` flags.
     
     Raises
     ------
     TypeError
-        If the input is not a pandas DataFrame.
+        If the input is not a pandas DataFrame or if `sort_by` is neither a string nor an integer.
     
     ValueError
-        If the DataFrame is empty.
+        If the DataFrame is empty, or if the specified `sort_by` column name or index is invalid.
     """
 
     # Validate input type
     if not isinstance(df, pd.DataFrame):
         raise TypeError(f'Input must be a pandas DataFrame, but received {type(df).__name__}.')
-    
-    # Calculate the length of the DataFrame once
+
+
+    # Calculate the length of the DataFrame once for efficiency
     num_rows = len(df)
     
-    # Validate DataFrame length to prevent dividing by 0 later on
+    # Validate DataFrame length to prevent division by 0
     if num_rows == 0:
         raise ValueError('The DataFrame is empty.')
     
-    # Calculate data types, missing values percentage, unique values and cardinality
+    # Calculate core statistics for the DataFrame
     data_type = df.dtypes
-    missings = round(df.isna().sum() / num_rows * 100, 2)
+    missings = (df.isna().sum() / num_rows * 100).round(2)  # Optimized to avoid rounding twice
     unique_values = df.nunique()
-    cardin = round(unique_values / num_rows * 100, 2)
+    cardin = (unique_values / num_rows * 100).round(2)
     
-    # Construct the summary DataFrame
+    # Create the summary DataFrame
     df_summary = pd.DataFrame({
-        'DATA_TYPE': data_type,
-        '%_MISSINGS': missings,
-        'UNIQUE_VALUES': unique_values,
-        '%_CARDIN': cardin
+        '#': df.columns.argsort(),
+        'Data type': data_type,
+        '% Missings': missings,
+        'Unique values': unique_values,
+        '% Cardinality': cardin
     })
     
-    # Optionally add the count of non-null values and rearrange the columns
-    if count and na_count:
-        not_null_count = df.notna().sum()
-        na = df.isna().sum()
-        df_summary.insert(1, 'NOT-NULL', not_null_count)
-        df_summary.insert(2, 'MISSINGS', na)
-    elif count:
-        not_null_count = df.notna().sum()
-        df_summary.insert(1, 'NOT-NULL', not_null_count)
-    elif na_count:
-        na = df.isna().sum()
-        df_summary.insert(1, 'MISSINGS', na)
+    # Optionally add the count of non-null values and missing values
+    if count or na_count:
+        not_null_count = df.notna().sum() if count else None
+        na = df.isna().sum() if na_count else None
         
-    if sort_na:
-        return df_summary.sort_values('%_MISSINGS', ascending = False)
+        if count:
+            df_summary.insert(2, 'Not-Null', not_null_count)
+        if na_count:
+            df_summary.insert(2, 'Missings', na)
+    
+    # Sort by column if sort_by is provided
+    if sort_by is not None:
+        if isinstance(sort_by, str):
+            # Check if the provided column name exists in the DataFrame
+            if sort_by not in df_summary.columns:
+                raise ValueError(f'Column name "{sort_by}" is not valid.')
+            df_summary = df_summary.sort_values(by = sort_by, ascending = ascending)
+        elif isinstance(sort_by, int):
+            # Check if the provided index is within bounds
+            if sort_by < 0 or sort_by >= len(df_summary.columns):
+                raise ValueError(f'Column index {sort_by} is out of bounds.')
+            df_summary = df_summary.sort_values(by = df_summary.columns[sort_by], ascending = ascending)
+        else:
+            raise TypeError(f'"sort_by" must be a string (column name) or an integer (column index).')
     
     return df_summary
 
-def tipifica_variables_extra(df, umbral_categoria, umbral_continua, *, unique_values = False, cardinality = False):
+
+def typify_variables(df, umbral_categoria, umbral_continua, *, unique_values = False, cardinality = False):
     """
     Classifies the columns of a DataFrame based on their cardinality and percentage cardinality.
     
