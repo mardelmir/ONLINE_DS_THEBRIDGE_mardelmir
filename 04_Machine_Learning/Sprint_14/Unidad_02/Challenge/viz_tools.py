@@ -280,7 +280,7 @@ def plot_categorical_relationship(df, cat_col1, cat_col2, *, relative = False, s
     Returns
     -------
     None: The function displays the plot and does not return any value.
-    '''
+    ''' 
     
     # Prepare the data
     count_data = df.groupby([cat_col1, cat_col2]).size().reset_index(name = 'count')
@@ -420,7 +420,7 @@ def plot_kde(df, target = '', columns = None, n_columns = 3, *, palette = 'virid
         sns.kdeplot(df, x = col, hue = target, ax = ax, fill = fill, palette = adjust_palette(palette, df[target].nunique()))
         ax.set_title(col, ha = 'center')
         ax.tick_params(colors = '#565656')
-        ax.grid(axis = 'y', color = '#CFD2D6', linewidth=0.4)
+        ax.grid(axis = 'y', color = '#CFD2D6', linewidth = 0.4)
         ax.set_axisbelow(True)
         ax.spines[['right', 'top', 'bottom', 'left']].set_color('#888888')
                 
